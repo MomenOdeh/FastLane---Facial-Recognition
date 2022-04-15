@@ -1,0 +1,86 @@
+<!-- templates/profile.html -->
+
+{% extends "base.html" %}
+
+
+{% block content %}
+
+<table style="width: 100%">
+  <tr>
+    <th>
+      <div class="card bg-info text-white">
+        <h2 style="text-align:center">Profile</h2>
+        <div style="text-align: center;">
+          <img id="profile_img" src="{{ url_for('static', filename=img_name) }}" alt="{{ name }}" style="width:50%">
+        </div>
+        <h1>{{ name }}</h1>
+        {% if card == "Empty" %}
+        {% else %}
+          <p>Your registered card is: </p>
+          <p>{{ card }}</p>
+        {% endif %}
+        <div style="margin: 24px 0;">
+          <a href="#"><i class="fa fa-dribbble"></i></a> 
+          <a href="#"><i class="fa fa-twitter"></i></a>  
+          <a href="#"><i class="fa fa-linkedin"></i></a>  
+          <a href="#"><i class="fa fa-facebook"></i></a> 
+        </div>
+      </div>
+    </th>
+
+    <th style="width:60%">
+      <div id="myblockdiv" class="box" style="text-align: center; width: 47.5%; margin-left: 27%;">
+        <p style="font-size: 20px; font-weight: bolder;">Payment Method</p>
+        <form method="POST" action="/card" enctype="multipart/form-data">
+          <div class="field">
+            <div class="control">
+              <p style="font-size: 13px; font-weight: normal;">IF NOT SAVED YET, Please input you card information below</p>
+              <div>
+                <p>Card Name Holder</p>
+                <input class="input is-large" type="name_holder" name="name_holder" placeholder="Card Name Holder" autofocus="" style="font-size:16px;">
+              </div>
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="control">
+              <div>
+                <p>Card Number</p>
+                <input class="input is-large" type="card" name="card" placeholder="Card Number" autofocus="" style="font-size:16px;">
+              </div>
+            </div>
+          </div>  
+
+          <div class="field">
+            <div class="control">
+              <div>
+                <p>CVV</p>
+                <input class="input is-large" type="cvv" name="cvv" placeholder="CVV" autofocus="" style="font-size:16px;">
+              </div>
+            </div>
+          </div>  
+
+          <div class="field">
+            <div class="control">   
+              <div style="padding-top: 6px;">    
+                <button class="btn btn-primary" onclick="sendUserData()">Save</button>
+              </div>
+
+              <div style="display: none;">
+                <input id="usr_nm" type="text" name="username">
+              </div>
+            </div> 
+          </div>
+        </form>
+      </div>
+    </th>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  function sendUserData(){
+    document.getElementById("usr_nm").value = {{name}};
+  }
+
+</script>
+{% endblock %}

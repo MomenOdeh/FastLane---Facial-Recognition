@@ -1,0 +1,51 @@
+
+
+{% extends "base2.html" %}
+
+
+{% block content %}
+
+<div id="vid-element" style="display: inline-block; width: 100%; text-align: left !important;">
+    <table style="width:100%; text-align:center;">
+        <tr>
+            <th style="display: inline-block; width: 50%; padding: 15px 15px 10px 0px;">
+                <video id="videoInput" width="720" height="550" muted controls></video>
+            </th>
+            <th style="display: inline-block;width:50%; padding-top: 15%;">
+                <div class="box" style="text-align: left; height: 50%;">
+                    <h3 id="name"></h3>
+                    <h3 id="seat-belt"></h3>
+                    <h3 id="since_first_frame_cntr"></h3>
+                    <h3 id="out_of_frame_cntr"></h3>
+                    <h3 id="bill"></h3>
+                </div>
+            </th>
+        </tr>
+    </table>
+    
+</div>
+
+<!-- <div style="display: inline-block; padding-top: 5rem; padding: 5rem; width: 50%;">
+
+</div> -->
+
+<script>
+    labels = []
+    {% for i in labels %}
+    labels.push(`{{i}}`)
+    {% endfor %}
+    // console.log(labels)
+</script>
+<script type="text/javascript" src="{{ url_for('static', filename = 'js/face-api.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename = 'js/script.js') }}"></script>
+
+<!-- <style>
+table{
+  border: 3px solid;
+}
+th {
+  border: 1px solid red;
+}
+</style> -->
+
+{% endblock %}

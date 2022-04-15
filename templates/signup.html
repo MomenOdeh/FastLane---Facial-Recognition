@@ -1,0 +1,144 @@
+<!-- templates/signup.html -->
+
+{% extends "base.html" %}
+
+{% block content %}
+<div class="column is-4 is-offset-4" style="width:100%; margin: 0;" >
+    <p style="font-size: 40px; font-weight: bolder;">Sign Up</p>
+    <div id="myblockdiv" class="box" style="text-align: center; width: 47.5%; margin-left: 27%;">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="notification is-danger">
+                {{ messages[0] }}. Go to <a href="{{ url_for('auth.login') }}">login page</a>.
+            </div>
+        {% endif %}
+        {% endwith %}
+        <form method="POST" action="/signup" enctype="multipart/form-data">
+            <div class="field">
+                <div class="control">
+                    <input class="input is-large" type="email" name="email" placeholder="Email" autofocus="">
+                </div>
+            </div>
+
+            <div class="field">
+                <div class="control">
+                    <input class="input is-large" type="text" name="name" placeholder="Name" autofocus="">
+                </div>
+            </div>
+
+            <div class="field">
+                <div class="control">
+                    <input class="input is-large" type="password" name="password" placeholder="Password">
+                </div>
+            </div>
+
+<!--             <div class="field">
+                <div class="control">
+                    <input class="input is-large" type="card" name="card" placeholder="Card">
+                </div>
+            </div> -->
+
+            <div class="field">
+                <div class="control">
+                    <dl>
+                        <p>
+                            <input type="file" name="file" autocomplete="off">
+                        </p>
+                    </dl>
+                </div>
+            </div>
+            <p style="font-size:18px; font-weight:normal; margin: 0;">OR</p>
+            <div id="my_photo_booth" style="margin:0;">
+                <div id="my_camera" style="width: 100%; margin: 0;"></div>
+                    <script src="{{url_for('static',filename='scripts/webcam.min.js')}}"></script>
+                    <script type=text/javascript src="{{url_for('static', filename='scripts/jquery.js') }}"> </script>
+                    <script language="JavaScript">
+                        Webcam.set({
+
+                            width: 640,
+                            height: 480,
+                            // device capture size
+                            dest_width: 640,
+                            dest_height: 480,
+
+                            // final cropped size
+                            crop_width: 480,
+                            crop_height: 480,
+
+                            // format and quality
+                            image_format: 'jpeg',
+                            jpeg_quality: 90,
+
+                            // flip horizontal (mirror mode)
+                            flip_horiz: true
+                        });
+                        Webcam.attach( '#my_camera' );
+                    </script>
+
+                    <div id="results" style="display: none; margin:0;">
+                        <input type="text" id="image_cap" name="photo_cap">
+                    </div>
+
+                    <div id="pre_take_buttons" style="margin:0;">
+                        <!-- This button is shown before the user takes a snapshot -->
+                        <input type=button class="btn btn-success btn-squared" value="CAPTURE" onClick="preview_snapshot()">
+                    </div>
+                </div>
+                <div style="padding-top: 6px;">    
+                    <button class="button is-block is-info is-large is-fullwidth" onClick="take_snapshot()">Sign Up</button>
+                </div>
+            </div>
+        </form>
+
+        <script language="JavaScript">
+            function take_snapshot() {
+                // take snapshot and get image data
+                Webcam.snap( function(data_uri) {
+                    // display results in page
+                    document.getElementById("image_cap").value = data_uri;
+                } );
+            }
+        </script>
+    </div>
+</div>
+
+
+<script language="JavaScript">
+    function preview_snapshot() {
+        // freeze camera so user can preview current frame
+        Webcam.freeze();
+
+        // swap button sets
+        document.getElementById('pre_take_buttons').style.display = 'none';
+        document.getElementById('post_take_buttons').style.display = '';
+    }
+
+    function cancel_preview() {
+        // cancel preview freeze and return to live camera view
+        Webcam.unfreeze();
+
+        // swap buttons back to first set
+        document.getElementById('pre_take_buttons').style.display = '';
+        document.getElementById('post_take_buttons').style.display = 'none';
+    }
+
+    function save_photo() {
+        // actually snap photo (from preview freeze).
+        Webcam.snap( function(data_uri) {
+            // display results in page
+            console.log(data_uri);
+
+            // shut down camera, stop capturing
+            Webcam.reset();
+
+            $.getJSON('/signup', {
+                photo_cap: data_uri,
+            },function(data){
+                var response = data.response;
+            });
+
+        } );
+    }
+</script>
+
+{% endblock %}
